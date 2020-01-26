@@ -1,0 +1,93 @@
+version: "3"
+services:
+  nginx:
+    build:
+      # 使用 context 指令指定 Dockerfile 所在文件夹的路径
+      context: ./services/nginx
+      # 使用 args 指令指定构建镜像时的变量
+      args:
+        TZ: ${TZ}
+        #NGINX_VERSION: ${NGINX_VERSION}
+        #CONTAINER_PACKAGE_URL: ${CONTAINER_PACKAGE_URL}
+        #NGINX_INSTALL_APPS: ${NGINX_INSTALL_APPS}
+    # container_name:指定容器名称（容器名称全docker唯一,字符范围：[a-zA-Z0-9][a-zA-Z0-9_.-]）
+    container_name: ${CONTAINER_PREFIX}-nginx
+    # ports:暴露端口信息；格式：port1:port2；por1:宿主机端口(选填)；port2:容器端口
+    ports:
+      - "${NGINX_HTTP_HOST_PORT}:80"
+      - "${NGINX_HTTPS_HOST_PORT}:443"
+    # volumes:数据卷所挂载路径设置,并且可以设置访问模式；格式：path1:path2;path1:宿主机路径；path2:容器路径
+    volumes:
+      - ${SOURCE_DIR}:/www/:rw
+      - ${NGINX_SSL_CERTIFICATE_DIR}:/ssl:rw
+      - ${NGINX_CONFD_DIR}:/etc/nginx/conf.d/:rw
+      - ${NGINX_CONF_FILE}:/etc/nginx/nginx.conf:ro
+      - ${NGINX_FASTCGI_PARAMS}:/etc/nginx/fastcgi_params:ro
+      - ${NGINX_LOG_DIR}:/var/log/nginx/:rw
+      #- ${NGINX_FASTCGI_PHP_CONF}:/etc/nginx/fastcgi-php.conf:ro
+    # environment:设置环境变量。你可以使用数组或字典两种格式。
+    environment:
+      TZ: "${TZ}"
+    # restart：指定容器退出后的重启策略为始终重启
+    restart: always
+    #允许容器中运行一些特权命令
+    privileged: true
+    networks:
+      - default
+
+  php73:
+    build:
+      context: ./services/php73
+      args:
+       TZ: "${TZ}"
+       PHP7_XDEBUG_REMOTE_ENABLE: "${PHP7_XDEBUG_REMOTE_ENABLE}"
+       PHP7_XDEBUG_REMOTE_HOST: "${PHP7_XDEBUG_REMOTE_HOST}"
+    container_name: ${CONTAINER_PREFIX}-php73
+    ports:
+      - "${PHP7_XDEBUG_REMOTE_PORT}:9090"
+    expose:
+      - 9000
+    volumes:
+       - ${PHP7_PHP_CONF_FILE}:/etc/opt/remi/php73/php.ini:ro
+       - ${PHP7_FPM_CONF_DIR}:/etc/opt/remi/php73/php-fpm.d:rw
+       - ${SOURCE_DIR}:/www/:rw
+       - ${PHP7_LOG_DIR}:/var/log/php7
+    restart: always
+    privileged: true
+    networks:
+      - default
+
+#  mariadb:
+#    build:
+#      context: ./services/mariadb
+#    container_name: hjm-mariadb
+#    ports:
+#      - "${MariaDB_HOST_PORT}:3306"
+#    volumes:
+#      - ${MariaDB_CONF_FILE}:/etc/my.cnf:rw
+#      - ${MariaDB_CONF_DIR}:/etc/my.cnf.d:rw
+#      - ${DATA_DIR}/mariadb:/var/lib/mysql/:rw
+#    restart: always
+#    privileged: true
+#    networks:
+#      - default
+
+  mariadb:
+    image: mariadb:${MariaDB_VERSION}
+    container_name: ${CONTAINER_PREFIX}-mariadb-${MariaDB_VERSION}
+    ports:
+      - "${MariaDB_HOST_PORT}:3306"
+    volumes:
+      - ${MariaDB_CONF_FILE}:/etc/mysql/my.cnf:ro
+      - ${MariaDB_CONF_DIR}:/etc/mysql/conf.d:ro
+      - ${DATA_DIR}/mariadb:/var/lib/mysql/:rw
+    restart: always
+    privileged: true
+    networks:
+      - default
+    environment:
+      MYSQL_ROOT_PASSWORD: "${MariaDB_ROOT_PASSWORD}"
+      TZ: "${TZ}"
+
+networks:
+  default:

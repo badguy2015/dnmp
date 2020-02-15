@@ -1,33 +1,4 @@
-FROM centos:centos7.7.1908
-
-ARG TZ
-ARG servicePath=/etc/systemd/system/multi-user.target.wants
-ARG serviceFile=/usr/lib/systemd/system/php73-php-fpm.service
-ARG xdebugFile=/etc/opt/remi/php73/php.d/15-xdebug.ini
-
-ARG PHP7_XDEBUG_REMOTE_ENABLE
-ARG PHP7_XDEBUG_REMOTE_HOST
-ARG PHP7_XDEBUG_REMOTE_PORT
-
-RUN rpm -Uvh https://mirrors.ustc.edu.cn/epel/7/x86_64/Packages/e/epel-release-7-12.noarch.rpm \
-&& rpm -Uvh https://mirrors.ustc.edu.cn/remi/enterprise/remi-release-7.rpm \
-&& yum --enablerepo=remi,remi-php73 install -y php73-php-fpm php73-php-common php73-php-mysql php73-php-pear php73-php-gd php73-php-devel php73-php-mbstring php73-php-mcrypt php73-php-cli php73-php-pdo php73-php-redis php73-php-pecl-memcache php73-php-bcmath php73-php-xml php73-php-intl php73-php-imagick php73-php-xdebug php73-php-xhprof \
-&& if [[ ! -d "${servicePath}" ]]; then \
-     echo "mkdir -p ${servicePath}..."; \
-     mkdir -p "${servicePath}"; \
-   fi \
-&& if [[ -e "${serviceFile}" ]]; then \
-     echo "ln -sf ${serviceFile} ${servicePath}/nginx.service..."; \
-     ln -sf ${serviceFile} ${servicePath}/php73-php-fpm.service; \
-   fi \
-&& if [[ -e "${xdebugFile}" ]]; then \
-     echo -e "xdebug.remote_enable = ${PHP7_XDEBUG_REMOTE_ENABLE}\nxdebug.remote_host = ${PHP7_XDEBUG_REMOTE_HOST}\nxdebug.remote_port = 9090" >> ${xdebugFile}; \
-     ln -sf ${serviceFile} ${servicePath}/php73-php-fpm.service; \
-   fi \
-&& ln -sf /opt/remi/php73/root/usr/bin/php /usr/bin/php \
-&& ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
-&& ln -sf /usr/lib/systemd/system/php73-php-fpm.service /usr/lib/systemd/system/php-fpm.service \
-&& export TZ="${TZ}"
+FROM badguy/dnmp_php73:1.0
 
 EXPOSE 9000 9090
 

@@ -58,36 +58,21 @@ services:
       - default
 
 #  mariadb:
-#    build:
-#      context: ./services/mariadb
-#    container_name: hjm-mariadb
+#    image: mariadb:${MariaDB_VERSION}
+#    container_name: ${CONTAINER_PREFIX}-mariadb-${MariaDB_VERSION}
 #    ports:
 #      - "${MariaDB_HOST_PORT}:3306"
 #    volumes:
-#      - ${MariaDB_CONF_FILE}:/etc/my.cnf:rw
-#      - ${MariaDB_CONF_DIR}:/etc/my.cnf.d:rw
+#      - ${MariaDB_CONF_FILE}:/etc/mysql/my.cnf:ro
+#      - ${MariaDB_CONF_DIR}:/etc/mysql/conf.d:ro
 #      - ${DATA_DIR}/mariadb:/var/lib/mysql/:rw
 #    restart: always
 #    privileged: true
 #    networks:
 #      - default
-
-  mariadb:
-    image: mariadb:${MariaDB_VERSION}
-    container_name: ${CONTAINER_PREFIX}-mariadb-${MariaDB_VERSION}
-    ports:
-      - "${MariaDB_HOST_PORT}:3306"
-    volumes:
-      - ${MariaDB_CONF_FILE}:/etc/mysql/my.cnf:ro
-      - ${MariaDB_CONF_DIR}:/etc/mysql/conf.d:ro
-      - ${DATA_DIR}/mariadb:/var/lib/mysql/:rw
-    restart: always
-    privileged: true
-    networks:
-      - default
-    environment:
-      MYSQL_ROOT_PASSWORD: "${MariaDB_ROOT_PASSWORD}"
-      TZ: "${TZ}"
+#    environment:
+#      MYSQL_ROOT_PASSWORD: "${MariaDB_ROOT_PASSWORD}"
+#      TZ: "${TZ}"
 
 networks:
   default:

@@ -21,7 +21,7 @@ function addRegistryMirrors() {
 	if [ ! -d "/etc/docker" ];then
 		mkdir -p /etc/docker
 	fi
-	echo -e "{\n  \"registry-mirrors\": [\n    "https://dockerhub.azk8s.cn",\n    "https://reg-mirror.qiniu.com"\n  ]\n}">/etc/docker/daemon.json
+	echo -e "{\n  \"registry-mirrors\": [\n    "https://dockerhub.azk8s.cn"\n  ]\n}">/etc/docker/daemon.json
 }
 
 # install curl if not exist

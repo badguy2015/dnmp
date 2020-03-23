@@ -19,6 +19,7 @@ services:
     # volumes:数据卷所挂载路径设置,并且可以设置访问模式；格式：path1:path2;path1:宿主机路径；path2:容器路径
     volumes:
       - ${SOURCE_DIR}:/www/:rw
+      - ${DEMO_DIR}:/demo/:rw
       - ${NGINX_SSL_CERTIFICATE_DIR}:/ssl:rw
       - ${NGINX_CONFD_DIR}:/etc/nginx/conf.d/:rw
       - ${NGINX_CONF_FILE}:/etc/nginx/nginx.conf:ro
@@ -51,6 +52,7 @@ services:
        - ${PHP7_PHP_CONF_FILE}:/etc/opt/remi/php73/php.ini:ro
        - ${PHP7_FPM_CONF_DIR}:/etc/opt/remi/php73/php-fpm.d:rw
        - ${SOURCE_DIR}:/www/:rw
+       - ${DEMO_DIR}:/demo/:rw
        - ${PHP7_LOG_DIR}:/var/log/php7
     restart: always
     privileged: true

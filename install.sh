@@ -82,7 +82,7 @@ function installDockerCompose() {
 
 declare -A config
 config=(
-	[installDir]="$(dirname $(pwd))"
+	[installDir]="$(pwd)"
 	[tplUrl]="https://github.com/badguy2015/dnmp.git"
 )
 

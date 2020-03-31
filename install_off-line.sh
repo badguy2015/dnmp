@@ -66,6 +66,9 @@ function downloadTpl() {
   if [ -f "${config[installDir]}/dnmp/external/docker_images/badguy-dnmp_php54-1.0" ];then
       docker load < ${config[installDir]}/dnmp/external/docker_images/badguy-dnmp_php54-1.0;
   fi
+  if [ -f "${config[installDir]}/dnmp/external/docker_images/mariadb-10.1" ];then
+      docker load < ${config[installDir]}/dnmp/external/docker_images/mariadb-10.1;
+  fi
 
 }
 

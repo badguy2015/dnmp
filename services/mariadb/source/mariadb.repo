@@ -1,5 +1,0 @@
-[mariadb]
-name = MariaDB
-baseurl = https://mirrors.ustc.edu.cn/mariadb/yum/10.4/centos7-amd64
-gpgkey=https://mirrors.ustc.edu.cn/mariadb/yum/RPM-GPG-KEY-MariaDB
-gpgcheck=1

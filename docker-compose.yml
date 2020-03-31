@@ -7,9 +7,6 @@ services:
       # 使用 args 指令指定构建镜像时的变量
       args:
         TZ: ${TZ}
-        #NGINX_VERSION: ${NGINX_VERSION}
-        #CONTAINER_PACKAGE_URL: ${CONTAINER_PACKAGE_URL}
-        #NGINX_INSTALL_APPS: ${NGINX_INSTALL_APPS}
     # container_name:指定容器名称（容器名称全docker唯一,字符范围：[a-zA-Z0-9][a-zA-Z0-9_.-]）
     container_name: ${CONTAINER_PREFIX}-nginx
     # ports:暴露端口信息；格式：port1:port2；por1:宿主机端口(选填)；port2:容器端口
@@ -41,40 +38,65 @@ services:
       context: ./services/php73
       args:
        TZ: "${TZ}"
-       PHP7_XDEBUG_REMOTE_ENABLE: "${PHP7_XDEBUG_REMOTE_ENABLE}"
-       PHP7_XDEBUG_REMOTE_HOST: "${PHP7_XDEBUG_REMOTE_HOST}"
+#       PHP7_XDEBUG_REMOTE_ENABLE: "${PHP7_XDEBUG_REMOTE_ENABLE}"
+#       PHP7_XDEBUG_REMOTE_HOST: "${PHP7_XDEBUG_REMOTE_HOST}"
     container_name: ${CONTAINER_PREFIX}-php73
-    ports:
-      - "${PHP7_XDEBUG_REMOTE_PORT}:9090"
+#    ports:
+#      - "${PHP7_XDEBUG_REMOTE_PORT}:9090"
     expose:
       - 9000
     volumes:
        - ${PHP7_PHP_CONF_FILE}:/etc/opt/remi/php73/php.ini:ro
+       - ${PHP7_XDEBUG_CONF_FILE}:/etc/opt/remi/php73/php.d/15-xdebug.ini:ro
        - ${PHP7_FPM_CONF_DIR}:/etc/opt/remi/php73/php-fpm.d:rw
        - ${SOURCE_DIR}:/www/:rw
        - ${DEMO_DIR}:/demo/:rw
-       - ${PHP7_LOG_DIR}:/var/log/php7
+       - ${PHP7_LOG_DIR}:/var/log/php7:rw
     restart: always
     privileged: true
     networks:
       - default
 
-#  mariadb:
-#    image: mariadb:${MariaDB_VERSION}
-#    container_name: ${CONTAINER_PREFIX}-mariadb-${MariaDB_VERSION}
+  php54:
+    build:
+      context: ./services/php54
+      args:
+       TZ: "${TZ}"
+#       PHP5_XDEBUG_REMOTE_ENABLE: "${PHP5_XDEBUG_REMOTE_ENABLE}"
+#       PHP5_XDEBUG_REMOTE_HOST: "${PHP5_XDEBUG_REMOTE_HOST}"
+    container_name: ${CONTAINER_PREFIX}-php54
 #    ports:
-#      - "${MariaDB_HOST_PORT}:3306"
-#    volumes:
-#      - ${MariaDB_CONF_FILE}:/etc/mysql/my.cnf:ro
-#      - ${MariaDB_CONF_DIR}:/etc/mysql/conf.d:ro
-#      - ${DATA_DIR}/mariadb:/var/lib/mysql/:rw
-#    restart: always
-#    privileged: true
-#    networks:
-#      - default
-#    environment:
-#      MYSQL_ROOT_PASSWORD: "${MariaDB_ROOT_PASSWORD}"
-#      TZ: "${TZ}"
+#      - "${PHP5_XDEBUG_REMOTE_PORT}:9090"
+    expose:
+      - 9000
+    volumes:
+      - ${PHP5_FPM_CONF_DIR}:/opt/remi/php54/root/etc/php-fpm.d:rw
+      - ${PHP5_XDEBUG_CONF_FILE}:/opt/remi/php54/root/etc/php.d/xdebug.ini:ro
+      - ${PHP5_PHP_CONF_FILE}:/opt/remi/php54/root/etc/php.ini:ro
+      - ${SOURCE_DIR}:/www/:rw
+      - ${DEMO_DIR}:/demo/:rw
+      - ${PHP5_LOG_DIR}:/var/log/php5:rw
+    restart: always
+    privileged: true
+    networks:
+      - default
+
+  mariadb:
+    image: mariadb:${MariaDB_VERSION}
+    container_name: ${CONTAINER_PREFIX}-mariadb
+    ports:
+      - "${MariaDB_HOST_PORT}:3306"
+    volumes:
+      - ${MariaDB_CONF_FILE}:/etc/mysql/my.cnf:ro
+      - ${MariaDB_CONF_DIR}:/etc/mysql/conf.d:ro
+      - ${DATA_DIR}/mariadb/mysql:/var/lib/mysql/:rw
+    restart: always
+    privileged: true
+    networks:
+      - default
+    environment:
+      MYSQL_ROOT_PASSWORD: "${MariaDB_ROOT_PASSWORD}"
+      TZ: "${TZ}"
 
 networks:
   default:

@@ -21,7 +21,7 @@ function addRegistryMirrors() {
 	if [ ! -d "/etc/docker" ];then
 		mkdir -p /etc/docker
 	fi
-	echo -e "{\n  \"registry-mirrors\": [\n    "https://dockerhub.azk8s.cn"\n  ]\n}">/etc/docker/daemon.json
+	echo -e "{\n  \"registry-mirrors\": [\n    \"https://dockerhub.azk8s.cn\"\n  ]\n}">/etc/docker/daemon.json
 }
 
 # install curl if not exist
@@ -52,10 +52,24 @@ function downloadTpl() {
 	fi
 	cd ${config[installDir]}
 	if [ -d "${config[installDir]}/dnmp" ];then
-		cd dnmp && git pull
+		cd dnmp && git fetch --all && git reset --hard origin/master && git pull
 	else
 		git clone ${config[tplUrl]}
 	fi
+
+  if [ -f "${config[installDir]}/dnmp/external/docker_images/badguy-dnmp_nginx-1.0" ];then
+      docker load < ${config[installDir]}/dnmp/external/docker_images/badguy-dnmp_nginx-1.0;
+  fi
+  if [ -f "${config[installDir]}/dnmp/external/docker_images/badguy-dnmp_php73-1.0" ];then
+      docker load < ${config[installDir]}/dnmp/external/docker_images/badguy-dnmp_php73-1.0;
+  fi
+  if [ -f "${config[installDir]}/dnmp/external/docker_images/badguy-dnmp_php54-1.0" ];then
+      docker load < ${config[installDir]}/dnmp/external/docker_images/badguy-dnmp_php54-1.0;
+  fi
+  if [ -f "${config[installDir]}/dnmp/external/docker_images/mariadb-10.1" ];then
+      docker load < ${config[installDir]}/dnmp/external/docker_images/mariadb-10.1;
+  fi
+
 }
 
 function build() {
@@ -71,10 +85,6 @@ function installDockerCompose() {
 		echo 'docker-compose exist'
     	return
 	else
-	    #install...
-	    #source 1
-	    #sudo curl -L https://github.com/docker/compose/releases/download/1.24.1/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
-	    #source 2
 	    sudo curl -L https://get.daocloud.io/docker/compose/releases/download/1.25.0/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
 	    sudo chmod +x /usr/local/bin/docker-compose
 	fi
@@ -82,7 +92,7 @@ function installDockerCompose() {
 
 declare -A config
 config=(
-	[installDir]="$(pwd)"
+	[installDir]="$(dirname $(pwd))"
 	[tplUrl]="https://github.com/badguy2015/dnmp.git"
 )
 

@@ -29,6 +29,6 @@ RUN rpm -Uvh https://mirrors.ustc.edu.cn/epel/7/x86_64/Packages/e/epel-release-7
 && ln -sf /usr/lib/systemd/system/php73-php-fpm.service /usr/lib/systemd/system/php-fpm.service \
 && export TZ="${TZ}"
 
-EXPOSE 9000 9090
+EXPOSE 9000
 
 CMD ["/usr/sbin/init"]

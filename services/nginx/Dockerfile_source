@@ -16,6 +16,7 @@ RUN rpm -Uvh https://mirrors.ustc.edu.cn/epel/7/x86_64/Packages/e/epel-release-7
      echo "ln -sf /usr/lib/systemd/system/nginx.service ${servicePath}/nginx.service..."; \
      ln -sf /usr/lib/systemd/system/nginx.service ${servicePath}/nginx.service; \
    fi \
+&& ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
 && export TZ="${TZ}"
 
 EXPOSE 80 443

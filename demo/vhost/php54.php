@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
@@ -22,6 +22,7 @@ echo '<li>Server IP：', $_SERVER['SERVER_ADDR'], '</li>';
 echo '<li>PHP版本：', PHP_VERSION, '</li>';
 echo '<li>Nginx版本：', $_SERVER['SERVER_SOFTWARE'], '</li>';
 echo '<li>MariaDB服务器版本：', getMysqlVersion(), '</li>';
+echo '<li>MariaDB服务器数据库列表：', getMysqlDatabases(), '</li>';
 //echo '<li>Redis服务器版本：', getRedisVersion(), '</li>';
 //echo '<li>MongoDB服务器版本：', getMongoVersion(), '</li>';
 echo '</ul>';
@@ -36,18 +37,6 @@ phpinfo();
  */
 function getMysqlVersion()
 {
-//    if (extension_loaded('PDO_MYSQL')) {
-//        try {
-//            $dbh = new PDO('mariadb:host=mariadb;dbname=mysql', 'root', '123456');
-//            $sth = $dbh->query('SELECT VERSION() as version');
-//            $info = $sth->fetch();
-//        } catch (PDOException $e) {
-//            return $e->getMessage();
-//        }
-//        return $info['version'];
-//    } else {
-//        return 'PDO_MYSQL 扩展未安装 ×';
-//    }
     if (extension_loaded('mysqli')) {
         try {
             $mysqli = new mysqli('mariadb', 'root', '123456', 'mysql', '3306');
@@ -63,6 +52,34 @@ function getMysqlVersion()
     }
 
 
+
+}
+
+/**
+ * 获取MySQL版本
+ */
+function getMysqlDatabases()
+{
+    if (extension_loaded('mysqli')) {
+        $arr = [];
+        try {
+            $mysqli = new mysqli('mariadb', 'root', '123456', 'mysql', '3306');
+            $sth = $mysqli->query('SHOW DATABASES');
+            while($row = $sth->fetch_row()){
+                $arr[] = $row;
+            }
+        } catch (PDOException $e) {
+            return $e->getMessage();
+        }
+        $str = '';
+        foreach ($arr as $v){
+            $str .= ','.current(($v));
+        }
+        $str = ltrim($str,',');
+        return $str;
+    }else{
+        return 'mysqli 扩展未安装 ×';
+    }
 
 }
 

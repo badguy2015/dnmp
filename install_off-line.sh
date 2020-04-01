@@ -52,7 +52,7 @@ function downloadTpl() {
 	fi
 	cd ${config[installDir]}
 	if [ -d "${config[installDir]}/dnmp" ];then
-		cd dnmp && git pull
+		cd dnmp && git fetch --all && git reset --hard origin/master && git pull
 	else
 		git clone ${config[tplUrl]}
 	fi

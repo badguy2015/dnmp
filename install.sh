@@ -21,7 +21,9 @@ function addRegistryMirrors() {
 	if [ ! -d "/etc/docker" ];then
 		mkdir -p /etc/docker
 	fi
-	echo -e "{\n  \"registry-mirrors\": [\n    \"https://dockerhub.azk8s.cn\"\n  ]\n}">/etc/docker/daemon.json
+	#azk8s.cn 镜像服务转为仅限Azure云内部使用
+#	echo -e "{\n  \"registry-mirrors\": [\n    \"https://dockerhub.azk8s.cn\"\n  ]\n}">/etc/docker/daemn.json
+	echo -e "{\n  \"registry-mirrors\": [\n    \"https://hub-mirror.163.com\"\n  ]\n}">/etc/docker/daemn.json
 }
 
 # install curl if not exist
@@ -52,7 +54,7 @@ function downloadTpl() {
 	fi
 	cd ${config[installDir]}
 	if [ -d "${config[installDir]}/dnmp" ];then
-		cd dnmp && git fetch --all && git reset --hard origin/master && git pull
+          echo "do nothing" #		cd dnmp && git fetch --all && git reset --hard origin/master && git pull
 	else
 		git clone ${config[tplUrl]}
 	fi

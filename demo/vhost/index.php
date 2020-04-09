@@ -8,7 +8,7 @@
 <body>
 
 <p>you are in phpContainer:"/demo/vhost/index.php";<br/>if you can't see phpinfo(),that the php is not work!</p>
-<br/>click [<a href="/php54.php">php54.php</a>],[<a href="/php73.php">php73.php</a>] to test the different php version;
+<br/>click [<a href="/php56.php">php56.php</a>],[<a href="/php73.php">php73.php</a>] to test the different php version;
 <hr />
 <?php
 error_reporting(E_ALL);

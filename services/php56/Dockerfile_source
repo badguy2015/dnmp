@@ -1,0 +1,34 @@
+FROM centos:centos7.7.1908
+
+ARG TZ
+ARG servicePath=/etc/systemd/system/multi-user.target.wants
+ARG serviceFile=/usr/lib/systemd/system/php56-php-fpm.service
+ARG xdebugFile=/etc/opt/remi/php56/php.d/15-xdebug.ini
+
+ARG PHP5_XDEBUG_REMOTE_ENABLE
+ARG PHP5_XDEBUG_REMOTE_HOST
+ARG PHP5_XDEBUG_REMOTE_PORT
+
+RUN rpm -Uvh https://mirrors.ustc.edu.cn/epel/7/x86_64/Packages/e/epel-release-7-12.noarch.rpm \
+&& rpm -Uvh https://mirrors.ustc.edu.cn/remi/enterprise/remi-release-7.rpm \
+&& yum --enablerepo=remi,remi-php56 install -y php56-php-fpm php56-php-common php56-php-mysql php56-php-pear php56-php-gd php56-php-devel php56-php-mbstring php56-php-mcrypt php56-php-cli php56-php-pdo php56-php-redis php56-php-pecl-memcache php56-php-bcmath php56-php-xml php56-php-intl php56-php-imagick php56-php-xdebug php56-php-xhprof \
+&& if [[ ! -d "${servicePath}" ]]; then \
+     echo "mkdir -p ${servicePath}..."; \
+     mkdir -p "${servicePath}"; \
+   fi \
+&& if [[ -e "${serviceFile}" ]]; then \
+     echo "ln -sf ${serviceFile} ${servicePath}/nginx.service..."; \
+     ln -sf ${serviceFile} ${servicePath}/php56-php-fpm.service; \
+   fi \
+&& if [[ -e "${xdebugFile}" ]]; then \
+     echo -e "xdebug.remote_enable = ${PHP5_XDEBUG_REMOTE_ENABLE}\nxdebug.remote_host = ${PHP5_XDEBUG_REMOTE_HOST}\nxdebug.remote_port = 9090" >> ${xdebugFile}; \
+     ln -sf ${serviceFile} ${servicePath}/php56-php-fpm.service; \
+   fi \
+&& ln -sf /opt/remi/php56/root/usr/bin/php /usr/bin/php \
+&& ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
+&& ln -sf /usr/lib/systemd/system/php56-php-fpm.service /usr/lib/systemd/system/php-fpm.service \
+&& export TZ="${TZ}"
+
+EXPOSE 9000
+
+CMD ["/usr/sbin/init"]

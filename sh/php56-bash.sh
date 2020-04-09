@@ -1,5 +1,5 @@
 #!/bin/bash
-defaultConatinerName="easyder-php54";
+defaultConatinerName="easyder-php56";
 
 echo -n "please enter nginx container name(default:${defaultConatinerName})->"
 read containerName

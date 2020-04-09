@@ -1,4 +1,4 @@
-FROM badguy/dnmp_php54:1.0
+FROM badguy/dnmp_php56:1.0
 
 EXPOSE 9000
 

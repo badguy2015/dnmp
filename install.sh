@@ -56,6 +56,7 @@ function downloadTpl() {
 	if [ -d "${config[installDir]}/dnmp" ];then
           echo "do nothing" #		cd dnmp && git fetch --all && git reset --hard origin/master && git pull
 	else
+	    git config --global core.autocrlf false
 		git clone ${config[tplUrl]}
 	fi
 

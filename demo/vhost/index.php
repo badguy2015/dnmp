@@ -8,7 +8,7 @@
 <body>
 
 <p>you are in phpContainer:"/demo/vhost/index.php";<br/>if you can't see phpinfo(),that the php is not work!</p>
-<br/>click [<a href="/php56.php">php56.php</a>],[<a href="/php73.php">php73.php</a>] to test the different php version;
+<br/>click [<a href="/php56.php">php56.php</a>],[<a href="/php74.php">php74.php</a>] to test the different php version;
 <hr />
 <?php
 error_reporting(E_ALL);
@@ -21,8 +21,8 @@ echo '<ul>';
 echo '<li>Server IP：', $_SERVER['SERVER_ADDR'], '</li>';
 echo '<li>PHP版本：', PHP_VERSION, '</li>';
 echo '<li>Nginx版本：', $_SERVER['SERVER_SOFTWARE'], '</li>';
-echo '<li>MariaDB服务器版本：', getMysqlVersion(), '</li>';
-echo '<li>MariaDB服务器数据库列表：', getMysqlDatabases(), '</li>';
+//echo '<li>MariaDB服务器版本：', getMysqlVersion(), '</li>';
+//echo '<li>MariaDB服务器数据库列表：', getMysqlDatabases(), '</li>';
 //echo '<li>Redis服务器版本：', getRedisVersion(), '</li>';
 //echo '<li>MongoDB服务器版本：', getMongoVersion(), '</li>';
 echo '</ul>';

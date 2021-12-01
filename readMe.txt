@@ -28,4 +28,4 @@
 ##xprof
 
 #权限
-./logs 递归可写权限
+./logs 递归可写权限 chmod -R 777 ./logs

@@ -21,9 +21,17 @@ function addRegistryMirrors() {
 	if [ ! -d "/etc/docker" ];then
 		mkdir -p /etc/docker
 	fi
-	#azk8s.cn 镜像服务转为仅限Azure云内部使用
-#	echo -e "{\n  \"registry-mirrors\": [\n    \"https://dockerhub.azk8s.cn\"\n  ]\n}">/etc/docker/daemn.json
-	echo -e "{\n  \"registry-mirrors\": [\n    \"https://hub-mirror.163.com\"\n  ]\n}">/etc/docker/daemn.json
+
+	{
+ "registry-mirrors" : [
+   "https://mirror.ccs.tencentyun.com",
+   "http://registry.docker-cn.com",
+   "http://docker.mirrors.ustc.edu.cn",
+   "http://hub-mirror.c.163.com",
+ ]
+}
+	# 配置源、dns
+	echo -e "{\n  \"registry-mirrors\": [\n   \"https://mirror.ccs.tencentyun.com\",\n   \"http://registry.docker-cn.com\",\n   \"http://docker.mirrors.ustc.edu.cn\",\n   \"https://hub-mirror.163.com\",\n   \"https://dockerhub.azk8s.cn\"\n ],\n \"dns\": [\n    \"8.8.8.8\",\n    \"114.114.114.114\" \n ]\n}">/etc/docker/daemn.json
 }
 
 # install curl if not exist
@@ -78,7 +86,7 @@ function downloadTpl() {
 function build() {
 	installDockerCompose
 	cd ${config['installDir']}/dnmp
-	docker-compose up -d
+	docker-compose up -d --build
 	docker-compose ps
 }
 
@@ -100,7 +108,7 @@ config=(
 )
 
 
-installDocker
+#installDocker
 addRegistryMirrors
 downloadTpl
 build

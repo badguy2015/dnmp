@@ -19,7 +19,7 @@ services:
       - ${DEMO_DIR}:/demo/:rw
       - ${NGINX_SSL_CERTIFICATE_DIR}:/ssl:rw
       - ${NGINX_CONFD_DIR}:/etc/nginx/conf.d/:rw
-      - ${NGINX_CONF_FILE}:/etc/nginx/nginx.conf:ro
+      - ${NGINX_CONF_FILE}:/etc/nginx/nginx.conf:rw
       - ${NGINX_FASTCGI_PARAMS}:/etc/nginx/fastcgi_params:ro
       - ${NGINX_LOG_DIR}:/var/log/nginx/:rw
       #- ${NGINX_FASTCGI_PHP_CONF}:/etc/nginx/fastcgi-php.conf:ro
@@ -33,53 +33,54 @@ services:
     networks:
       - default
 
-  php73:
+#   php73:
+#     build:
+#       context: ./services/php73
+#       args:
+#        TZ: "${TZ}"
+# #       PHP7_XDEBUG_REMOTE_ENABLE: "${PHP7_XDEBUG_REMOTE_ENABLE}"
+# #       PHP7_XDEBUG_REMOTE_HOST: "${PHP7_XDEBUG_REMOTE_HOST}"
+#     container_name: ${CONTAINER_PREFIX}-php73
+# #    ports:
+# #      - "${PHP7_XDEBUG_REMOTE_PORT}:9090"
+#     expose:
+#       - 9000
+#     volumes:
+#        - ${PHP7_PHP_CONF_FILE}:/etc/opt/remi/php73/php.ini:ro
+#        - ${PHP7_XDEBUG_CONF_FILE}:/etc/opt/remi/php73/php.d/15-xdebug.ini:ro
+#        - ${PHP7_FPM_CONF_DIR}:/etc/opt/remi/php73/php-fpm.d:rw
+#        - ${SOURCE_DIR}:/www/:rw
+#        - ${DEMO_DIR}:/demo/:rw
+#        - ${PHP7_LOG_DIR}:/var/log/php7:rw
+#     restart: always
+#     privileged: true
+#     networks:
+#       - default
+
+  php74:
     build:
-      context: ./services/php73
+      context: ./services/php74
       args:
-       TZ: "${TZ}"
-#       PHP7_XDEBUG_REMOTE_ENABLE: "${PHP7_XDEBUG_REMOTE_ENABLE}"
-#       PHP7_XDEBUG_REMOTE_HOST: "${PHP7_XDEBUG_REMOTE_HOST}"
-    container_name: ${CONTAINER_PREFIX}-php73
+        TZ: "${TZ}"
+        PHP74_XDEBUG_REMOTE_ENABLE: "${PHP74_XDEBUG_REMOTE_ENABLE}"
+        PHP74_XDEBUG_REMOTE_HOST: "${PHP74_XDEBUG_REMOTE_HOST}"
+    container_name: ${CONTAINER_PREFIX}-php74
 #    ports:
-#      - "${PHP7_XDEBUG_REMOTE_PORT}:9090"
+#      - "${PHP74_XDEBUG_REMOTE_PORT}:9090"
     expose:
       - 9000
     volumes:
-       - ${PHP7_PHP_CONF_FILE}:/etc/opt/remi/php73/php.ini:ro
-       - ${PHP7_XDEBUG_CONF_FILE}:/etc/opt/remi/php73/php.d/15-xdebug.ini:ro
-       - ${PHP7_FPM_CONF_DIR}:/etc/opt/remi/php73/php-fpm.d:rw
-       - ${SOURCE_DIR}:/www/:rw
-       - ${DEMO_DIR}:/demo/:rw
-       - ${PHP7_LOG_DIR}:/var/log/php7:rw
+      - ${PHP74_PHP_CONF_FILE}:/etc/opt/remi/php74/php.ini:ro
+      - ${PHP74_PHP_FPM_CONF_FILE}:/etc/opt/remi/php74/php-fpm.conf:ro
+      - ${PHP74_XDEBUG_CONF_FILE}:/etc/opt/remi/php74/php.d/15-xdebug.ini:ro
+      - ${PHP74_FPM_CONF_DIR}:/etc/opt/remi/php74/php-fpm.d:rw
+      - ${SOURCE_DIR}:/www/:rw
+      - ${DEMO_DIR}:/demo/:rw
+      - ${PHP74_LOG_DIR}:/var/log/php74:rw
     restart: always
     privileged: true
     networks:
       - default
-
-#  php54:
-#    build:
-#      context: ./services/php54
-#      args:
-#       TZ: "${TZ}"
-##       PHP5_XDEBUG_REMOTE_ENABLE: "${PHP5_XDEBUG_REMOTE_ENABLE}"
-##       PHP5_XDEBUG_REMOTE_HOST: "${PHP5_XDEBUG_REMOTE_HOST}"
-#    container_name: ${CONTAINER_PREFIX}-php54
-##    ports:
-##      - "${PHP5_XDEBUG_REMOTE_PORT}:9090"
-#    expose:
-#      - 9000
-#    volumes:
-#      - ${PHP5_FPM_CONF_DIR}:/opt/remi/php54/root/etc/php-fpm.d:rw
-#      - ${PHP5_XDEBUG_CONF_FILE}:/opt/remi/php54/root/etc/php.d/xdebug.ini:ro
-#      - ${PHP5_PHP_CONF_FILE}:/opt/remi/php54/root/etc/php.ini:ro
-#      - ${SOURCE_DIR}:/www/:rw
-#      - ${DEMO_DIR}:/demo/:rw
-#      - ${PHP5_LOG_DIR}:/var/log/php5:rw
-#    restart: always
-#    privileged: true
-#    networks:
-#      - default
 
   php56:
     build:
@@ -89,8 +90,8 @@ services:
        PHP5_XDEBUG_REMOTE_ENABLE: "${PHP5_XDEBUG_REMOTE_ENABLE}"
        PHP5_XDEBUG_REMOTE_HOST: "${PHP5_XDEBUG_REMOTE_HOST}"
     container_name: ${CONTAINER_PREFIX}-php56
-    ports:
-      - "${PHP5_XDEBUG_REMOTE_PORT}:9090"
+#    ports:
+#      - "${PHP5_XDEBUG_REMOTE_PORT}:9090"
     expose:
       - 9000
     volumes:
@@ -113,7 +114,8 @@ services:
     volumes:
       - ${MariaDB_CONF_FILE}:/etc/mysql/my.cnf:ro
       - ${MariaDB_CONF_DIR}:/etc/mysql/conf.d:ro
-      - ${DATA_DIR}/mariadb/mysql:/var/lib/mysql/:rw
+      - ${DATA_DIR}/mariadb/dataDir:/var/lib/mysql/:rw
+      - ${MariaDB_LOG_DIR}:/var/log/mysql:rw
     restart: always
     privileged: true
     networks:

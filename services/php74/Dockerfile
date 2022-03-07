@@ -14,7 +14,7 @@ RUN rpm -Uvh https://mirrors.ustc.edu.cn/epel/7/x86_64/Packages/e/epel-release-7
 RUN yum --enablerepo=remi install -y php74-php-fpm
 RUN yum --enablerepo=remi install -y php74-php-common
 
-RUN yum --enablerepo=remi install -y php74-php-mysql php74-php-pear php74-php-gd php74-php-devel php74-php-mbstring php74-php-mcrypt php74-php-cli php74-php-pdo php74-php-redis php74-php-pecl-memcache php74-php-bcmath php74-php-xml php74-php-intl php74-php-imagick php74-php-xdebug php74-php-xhprof \
+RUN yum --enablerepo=remi install -y php74-php-mysql php74-php-pear php74-php-gd php74-php-devel php74-php-mbstring php74-php-mcrypt php74-php-cli php74-php-pdo php74-php-redis php74-php-pecl-memcache php74-php-bcmath php74-php-xml php74-php-intl php74-php-imagick php74-php-xdebug php74-php-xhprof php74-php-opcache \
 && if [[ ! -d "${servicePath}" ]]; then \
      echo "mkdir -p ${servicePath}..."; \
      mkdir -p "${servicePath}"; \

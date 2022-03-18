@@ -14,7 +14,7 @@ RUN rpm -Uvh https://mirrors.ustc.edu.cn/epel/7/x86_64/Packages/e/epel-release-7
 RUN yum --enablerepo=remi install -y php74-php-fpm
 RUN yum --enablerepo=remi install -y php74-php-common
 
-RUN yum --enablerepo=remi install -y php74-php-mysql php74-php-pear php74-php-gd php74-php-devel php74-php-mbstring php74-php-mcrypt php74-php-cli php74-php-pdo php74-php-redis php74-php-pecl-memcache php74-php-bcmath php74-php-xml php74-php-intl php74-php-imagick php74-php-xdebug php74-php-xhprof php74-php-opcache \
+RUN yum --enablerepo=remi install -y php74-php-mysql php74-php-pear php74-php-gd php74-php-devel php74-php-mbstring php74-php-mcrypt php74-php-cli php74-php-pdo php74-php-redis php74-php-pecl-memcache php74-php-bcmath php74-php-xml php74-php-intl php74-php-imagick php74-php-xdebug php74-php-xhprof \
 && if [[ ! -d "${servicePath}" ]]; then \
      echo "mkdir -p ${servicePath}..."; \
      mkdir -p "${servicePath}"; \
@@ -31,6 +31,13 @@ RUN yum --enablerepo=remi install -y php74-php-mysql php74-php-pear php74-php-gd
 && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
 && ln -sf /usr/lib/systemd/system/php74-php-fpm.service /usr/lib/systemd/system/php-fpm.service \
 && export TZ="${TZ}"
+
+RUN curl -sS https://getcomposer.org/installer | php \
+&& mv composer.phar /usr/local/bin/composer \
+&& composer -V \
+&& yum install -y unzip \
+&& composer config -g repo.packagist composer https://mirrors.cloud.tencent.com/composer \
+&& composer global require slince/composer-registry-manager
 
 EXPOSE 9000
 

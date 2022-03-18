@@ -29,6 +29,13 @@ RUN rpm -Uvh https://mirrors.ustc.edu.cn/epel/7/x86_64/Packages/e/epel-release-7
 && ln -sf /usr/lib/systemd/system/php73-php-fpm.service /usr/lib/systemd/system/php-fpm.service \
 && export TZ="${TZ}"
 
+RUN curl -sS https://getcomposer.org/installer | php \
+&& mv composer.phar /usr/local/bin/composer \
+&& composer -V \
+&& yum install -y unzip \
+&& composer config -g repo.packagist composer https://mirrors.cloud.tencent.com/composer \
+&& composer global require slince/composer-registry-manager
+
 EXPOSE 9000
 
 CMD ["/usr/sbin/init"]

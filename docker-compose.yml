@@ -118,11 +118,21 @@ services:
       - ${MariaDB_LOG_DIR}:/var/log/mysql:rw
     restart: always
     privileged: true
-    networks:
-      - default
     environment:
       MYSQL_ROOT_PASSWORD: "${MariaDB_ROOT_PASSWORD}"
       TZ: "${TZ}"
+    networks:
+      - default
+
+  redis:
+    image: redis:${Redis_VERSION}
+    container_name: ${CONTAINER_PREFIX}-redis
+    ports:
+      - "${Redis_HOST_PORT}:6379"
+    restart: always
+    privileged: true
+    networks:
+      - default
 
 networks:
   default:
